@@ -18,9 +18,7 @@
         var defaults = $.fn.cardcheck.opts;
         
         // Allow for just a callback to be provided or extend opts
-        opts = opts && $.isFunction(opts)
-                ? (defaults.callback = opts, defaults)
-                : $.extend(defaults, opts);
+        opts = opts && $.isFunction(opts) ? (defaults.callback = opts, defaults) : $.extend(defaults, opts);
         
         // Callback invokation
         function update(type, className, valid, num) {
