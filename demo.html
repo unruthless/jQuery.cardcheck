@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Detect Credit Card Type</title>
+  <style type="text/css">
+    #cards .card {
+      display: none;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <form>
+    <label for="card_number">Enter Card Number:</label>
+    <input type="text" name="card_number" id="card_number" value="">
+    <span id="cards">
+      <img src="icons/visa.png" class="card visa" alt="Visa">
+      <img src="icons/mastercard.png" class="card mastercard" alt="MasterCard">
+      <img src="icons/amex.png" class="card amex" alt="American Express">
+      <img src="icons/discover.png" class="card discover" alt="Discover">
+    </span>
+    <span id="status"></span>
+  </form>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+  <script src="jquery.cardcheck.js"></script>
+  <script>
+  jQuery(function($) {
+      
+      var statuses = {
+          'empty':   '',
+          'unknown': 'Sorry, that isn\'t a recognized card type.',
+          'invalid': 'Invalid :(',
+          'valid':   'Valid :)'
+      };
+      
+      $('#card_number').cardcheck({
+          callback: function(type, className, valid, num, opts, caller) {
+              
+              // Show credit card type
+              $('#cards').find('.card').hide().filter(className).show();
+              
+              // Get status
+              var status = num.length < 1 ? 'empty' : !type ? 'unknown' : valid ? 'valid' : 'invalid';
+              
+              // Show status
+              $('#status').html(statuses[status]);
+              
+          }
+      });
+      
+  });
+  </script>
+
+
+</body>
+
+</html>
+
+
+
