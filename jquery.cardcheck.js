@@ -26,19 +26,16 @@
             opts = $.extend(defaults, opts);
         }
         
-        // Callback invokation
-        function update(type, className, valid, num) {
-            opts.callback.apply(this, [type, className, valid, num, opts]);
-        }
-        
         // Fire on keyup
         return this.bind('keyup', function() {
             
-            var num = this.value.replace(/\D+/g, ''), // strip all non-digits
+            var cards = opts.types || {},
+                num = this.value.replace(/\D+/g, ''), // strip all non-digits
                 len = num.length,
                 type,
                 className = '',
-                cards = opts.types || {};
+                validLen = false,
+                validLuhn = false;
             
             // Get matched type based on credit card number
             $.each(cards, function(name, props) {
@@ -48,23 +45,21 @@
                 }
             });
             
-            // If no number, no cards, or no matched type, invoke callback with type = undefined and valid = false
-            if (!num || !cards || !cards[type]) {
-                update.apply(this, [type, className, false, num]);
-                return false; // break
+            // If number, cards, and a matched type
+            if (num && cards && cards[type]) {
+                
+                // Assign className based on matched type
+                className = cards[type].className;
+                
+                // Check card length
+                validLen = cards[type].check.length(len) ? true : false;
+                
+                // Check Luhn
+                validLuhn = opts.luhn(num, len) ? true : false;
             }
             
-            // Assign className based on matched type
-            className = cards[type].className;
-            
-            // If card fails length or Luhn checks, invoke callback with matched type and valid = false
-            if (!cards[type].check.length(len) || !opts.luhn(num, len)) {
-                update.apply(this, [type, className, false, num]);
-                return false; // break
-            }
-            
-            // Invoke callback with matched type and valid = true
-            update.apply(this, [type, className, true, num]);
+            // Invoke callback
+            opts.callback.apply(this, [num, type, className, validLen, validLuhn, opts]);
         
         });
     };
@@ -73,7 +68,7 @@
     $.fn.cardcheck.opts = {
         luhn: function(num, len) {
             // http://en.wikipedia.org/wiki/Luhn_algorithm
-            if ( !num || !len ) { return false; }
+            if (!num || !len) { return false; }
             num = num.split('').reverse();
             var total = 0,
                 i;
@@ -81,7 +76,7 @@
                 num[i] = window.parseInt(num[i], 10);
                 total += i % 2 ? 2 * num[i] - (num[i] > 4 ? 9 : 0) : num[i];
             }
-            return (total % 10 === 0);
+            return total % 10 === 0;
         },
         types: {
             'Visa': {
