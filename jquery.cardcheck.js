@@ -18,11 +18,17 @@
         var defaults = $.fn.cardcheck.opts;
         
         // Allow for just a callback to be provided or extend opts
-        opts = opts && $.isFunction(opts) ? (defaults.callback = opts, defaults) : $.extend(defaults, opts);
+        if (opts && $.isFunction(opts)) {
+            defaults.callback = opts;
+            opts = defaults;
+        }
+        else {
+            opts = $.extend(defaults, opts);
+        }
         
         // Callback invokation
         function update(type, className, valid, num) {
-            opts.callback.apply(this, [type, className, valid, num, opts, arguments.callee]);
+            opts.callback.apply(this, [type, className, valid, num, opts]);
         }
         
         // Fire on keyup
@@ -30,7 +36,7 @@
             
             var num = this.value.replace(/\D+/g, ''), // strip all non-digits
                 len = num.length,
-                type = undefined,
+                type,
                 className = '',
                 cards = opts.types || {};
             
@@ -69,8 +75,9 @@
             // http://en.wikipedia.org/wiki/Luhn_algorithm
             if ( !num || !len ) { return false; }
             num = num.split('').reverse();
-            var total = i = 0;
-            for (; i < len; i++) {
+            var total = 0,
+                i;
+            for (i = 0; i < len; i++) {
                 num[i] = window.parseInt(num[i], 10);
                 total += i % 2 ? 2 * num[i] - (num[i] > 4 ? 9 : 0) : num[i];
             }
