@@ -40,13 +40,13 @@
       };
       
       $('#card_number').cardcheck({
-          callback: function(num, type, className, validLen, validLuhn, opts) {
+          callback: function(num, len, type, className, validLen, validLuhn, opts) {
               
               // Show credit card type
               $('#cards').find('.card').hide().filter(className).show();
               
               // Get status
-              var status = num.length < 1 ? 'empty' : !type ? 'unknown' : !validLen ? 'invalidLen' : !validLuhn ? 'invalidLuhn' : 'valid';
+              var status = len < 1 ? 'empty' : !type ? 'unknown' : !validLen ? 'invalidLen' : !validLuhn ? 'invalidLuhn' : 'valid';
               
               // Show status
               $('#status').html(statuses[status]);

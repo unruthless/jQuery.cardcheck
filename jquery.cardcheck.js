@@ -59,7 +59,7 @@
             }
             
             // Invoke callback
-            opts.callback.apply(this, [num, type, className, validLen, validLuhn, opts]);
+            opts.callback.apply(this, [num, len, type, className, validLen, validLuhn, opts]);
         
         });
     };
