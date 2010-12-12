@@ -12,7 +12,7 @@
 (function(window, document, $) {
     var defaults;
     
-    // Plugin core
+    // Plugin Core
     $.cardcheck = function(opts) {
         var cards = defaults.types || {},
             num = (typeof opts === "string") ? opts : opts.num,
@@ -45,7 +45,7 @@
         };
     };
 
-    // Plugin helper
+    // Plugin Helper
     $.fn.cardcheck = function(opts) {
         
         // Allow for just a callback to be provided or extend opts
@@ -75,7 +75,15 @@
             }
             
             // Invoke callback
-            opts.callback.call(this, {num: num, len: num.length, cardName: name, cardClass: className, validLen: check.validLen, validLuhn: check.validLuhn, opts: opts });
+            opts.callback.call(this, {
+                num: num,
+                len: num.length,
+                cardName: name,
+                cardClass: className,
+                validLen: check.validLen,
+                validLuhn: check.validLuhn,
+                opts: opts
+            });
             
         });
     };
