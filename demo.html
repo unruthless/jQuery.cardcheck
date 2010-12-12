@@ -5,29 +5,29 @@
   <meta charset="utf-8">
   <title>Detect Credit Card Type</title>
   <style type="text/css">
-    #card_type {
+    /* --- Card Type --- */
+    #card .card_type {
       background: url('icons/credit_card_sprites.png') no-repeat 30px 0;
       display: inline-block;
       height: 20px;
       width: 27px;
     }
-    #card_type.visa       { background-position: 0 0 !important; }
-    #card_type.mastercard { background-position: -30px 0 !important; }
-    #card_type.amex       { background-position: -60px 0 !important; }
-    #card_type.discover   { background-position: -90px 0 !important; }
-/*
-    #card_status {
-      background: url('icons/status_sprites.png') no-repeat 30px 0;
+    #card .card_type.visa       { background-position:   0   0 !important; }
+    #card .card_type.mastercard { background-position: -30px 0 !important; }
+    #card .card_type.amex       { background-position: -60px 0 !important; }
+    #card .card_type.discover   { background-position: -90px 0 !important; }
+
+    /* --- Card Status --- */
+    #card .status .icon {
+      background: transparent url('icons/status_sprites.png') no-repeat 30px 0;
+      display:inline-block;
       height: 20px;
+      width: 23px;
     }
-    #card_status span {
-      background-color: #CCC;
-      display: block;
-      margin-left: 25px;
-    }
-    #card_status.invalid  { background-position: 0 0 !important; color: #F00; }
-    #card_status.valid    { background-position: -30px 0 !important; color: #0F0; }
-    */
+    #card .status.invalid       { color: #F00; }
+    #card .status.valid         { color: #0F0; }
+    #card .status.invalid .icon { background-position: 0 0 !important; }
+    #card .status.valid .icon   { background-position: -30px 0 !important; }
   </style>
 
 </head>
@@ -35,11 +35,14 @@
 <body>
 
   <form>
-    <div class="field">
+    <div class="field" id="card">
       <label for="card_number">Enter Card Number:</label>
-      <input id="card_number" type="text" name="card_number" value="">
-      <span id="card_type"></span>
-      <p id="card_status"><span></span></p>
+      <input name="card_number" type="text" value="">
+      <span class="card_type"></span>
+      <span class="status">
+        <span class="icon"></span>
+        <span class="message"></span>
+      </span>
     </div>
   </form>
 
@@ -48,21 +51,41 @@
   <script>
   jQuery(function($) {
       
+      $('#card input').bind('focus', function() {
+          $(this).siblings('.status').hide();
+      });
+
+      $('#card input').bind('blur', function() {
+          $(this).siblings('.status').show();
+      });
+      
       // Run jQuery.cardcheck
-      $('#card_number').cardcheck({
-          callback: function(num, len, type, className, validLen, validLuhn, opts) {
+      $('#card input').cardcheck({
+          callback: function(result) {
+              
+              var status = (result.validLen && result.validLuhn) ? 'valid' : 'invalid',
+                  message = '',
+                  types = '';
               
               // Show credit card type
-              $('#card_type').removeClass().addClass(className);
+              $('.card_type').removeClass().addClass('card_type ' + result.cardClass);
+              
+              // Get the names of all accepted card types
+              for (i in result.opts.types) {
+                  types += result.opts.types[i].name + ", ";
+              }
+              types = types.substring(0, types.length-2);
               
               // Get and populate status
-              var status = (validLen && validLuhn) ? 'valid' : 'invalid',
-                  message = (len < 1) ? 'Please provide a credit card number.' : !type ? 'We accept Visa, MasterCard, American Express, and Discover.' : (!validLen || !validLuhn) ? 'Please check that this number matches your credit card.' : '';
-
-              $('#card_status')
-                  .removeClass().addClass(status)
-                  .children().text(message);
+              if (result.len < 1) {
+                  message = 'Please provide a credit card number.';
+              } else if (!result.cardClass) {
+                  message = 'We accept the following types of cards: ' + types + '.';
+              } else if (!result.validLen || !result.validLuhn) {
+                  message = 'Please check that this number matches your ' + result.cardName + '.';
+              }
               
+              $('#card .status').removeClass('invalid valid').addClass(status).children('.message').text(message);
           }
       });
       

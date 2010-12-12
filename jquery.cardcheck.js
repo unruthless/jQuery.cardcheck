@@ -10,12 +10,43 @@
  */
 
 (function(window, document, $) {
-
-    // Plugin
-    $.fn.cardcheck = function(opts) {
+    var defaults;
+    
+    // Plugin core
+    $.cardcheck = function(opts) {
+        var cards = defaults.types || {},
+            num = (typeof opts === "string") ? opts : opts.num,
+            len = num.length,
+            type,
+            validLen = false,
+            validLuhn = false;
         
-        // Set defaults
-        var defaults = $.fn.cardcheck.opts;
+        // Get matched type based on credit card number
+        $.each(cards, function(index, card) {
+            if (card.checkType(num)) {
+                type = index;
+                return false;
+            }
+        });
+        
+        // If number, cards, and a matched type
+        if (num && cards && cards[type]) {
+            // Check card length
+            validLen = cards[type].checkLength(len);
+            
+            // Check Luhn
+            validLuhn = defaults.checkLuhn(num, len);
+        }
+        
+        return {
+            type: type,
+            validLen: validLen,
+            validLuhn: validLuhn
+        };
+    };
+
+    // Plugin helper
+    $.fn.cardcheck = function(opts) {
         
         // Allow for just a callback to be provided or extend opts
         if (opts && $.isFunction(opts)) {
@@ -23,50 +54,35 @@
             opts = defaults;
         }
         else {
-            opts = $.extend(defaults, opts);
+            opts = $.extend({}, defaults, opts);
         }
         
         // Fire on keyup
         return this.bind('keyup', function() {
             
             var cards = opts.types || {},
-                num = this.value.replace(/\D+/g, ''), // strip all non-digits
-                len = num.length,
-                type,
+                num = this.value,
+                name = '',
                 className = '',
-                validLen = false,
-                validLuhn = false;
+                
+                // Check card
+                check = $.cardcheck({ num: num });
             
-            // Get matched type based on credit card number
-            $.each(cards, function(name, props) {
-                if (props.check.match(num)) {
-                    type = name;
-                    return false; // break
-                }
-            });
-            
-            // If number, cards, and a matched type
-            if (num && cards && cards[type]) {
-                
-                // Assign className based on matched type
-                className = cards[type].className;
-                
-                // Check card length
-                validLen = cards[type].check.length(len);
-                
-                // Check Luhn
-                validLuhn = opts.luhn(num, len);
+            // Assign className based on matched type
+            if (typeof check.type === "number") {
+                name = cards[check.type].name;
+                className = cards[check.type].className;
             }
             
             // Invoke callback
-            opts.callback.apply(this, [num, len, type, className, validLen, validLuhn, opts]);
-        
+            opts.callback.call(this, {num: num, len: num.length, cardName: name, cardClass: className, validLen: check.validLen, validLuhn: check.validLuhn, opts: opts });
+            
         });
     };
     
     // Plugin Options
-    $.fn.cardcheck.opts = {
-        luhn: function(num, len) {
+    defaults = $.fn.cardcheck.opts = {
+        checkLuhn: function(num, len) {
             // http://en.wikipedia.org/wiki/Luhn_algorithm
             if (!num || !len) { return false; }
             num = num.split('').reverse();
@@ -78,36 +94,32 @@
             }
             return total % 10 === 0;
         },
-        types: {
-            'Visa': {
-                'className': 'visa',
-                'check': {
-                    'match':  function(num) { return num[0] === '4'; }, // typeof num[0] = string
-                    'length': function(len) { return len === 13 || len === 16; } // typeof len = number
-                }
+        types: [
+            {
+                name: 'Visa',
+                className: 'visa',
+                checkType: function(num) { return num[0] === '4'; },
+                checkLength: function(len) { return len === 13 || len === 16; }
              },
-            'American Express': {
-                'className': 'amex',
-                'check': {
-                    'match':  function(num) { return num[0] === '3'; },
-                    'length': function(len) { return len === 15; }
-                }
+            {
+                name: 'American Express',
+                className: 'amex',
+                checkType: function(num) { return num[0] === '3'; },
+                checkLength: function(len) { return len === 15; }
             },
-            'Mastercard': {
-                'className': 'mastercard',
-                'check': {
-                    'match':  function(num) { return num[0] === '5'; },
-                    'length': function(len) { return len === 16; }
-                }
+            {
+                name: 'MasterCard',
+                className: 'mastercard',
+                checkType: function(num) { return num[0] === '5'; },
+                checkLength: function(len) { return len === 16; }
             },
-            'Discover': {
-                'className': 'discover',
-                'check': {
-                    'match':  function(num) { return num[0] === '6'; },
-                    'length': function(len) { return len === 16; }
-                }
+            {
+                name: 'Discover',
+                className: 'discover',
+                checkType:  function(num) { return num[0] === '6'; },
+                checkLength: function(len) { return len === 16; }
             }
-        },
+        ],
         callback: $.noop
     };
 
