@@ -52,10 +52,10 @@
                 className = cards[type].className;
                 
                 // Check card length
-                validLen = cards[type].check.length(len) ? true : false;
+                validLen = cards[type].check.length(len);
                 
                 // Check Luhn
-                validLuhn = opts.luhn(num, len) ? true : false;
+                validLuhn = opts.luhn(num, len);
             }
             
             // Invoke callback
