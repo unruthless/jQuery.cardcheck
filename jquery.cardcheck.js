@@ -80,28 +80,28 @@
         },
         types: {
             'Visa': {
-                'className': '.visa',
+                'className': 'visa',
                 'check': {
                     'match':  function(num) { return num[0] === '4'; }, // typeof num[0] = string
                     'length': function(len) { return len === 13 || len === 16; } // typeof len = number
                 }
              },
             'American Express': {
-                'className': '.amex',
+                'className': 'amex',
                 'check': {
                     'match':  function(num) { return num[0] === '3'; },
                     'length': function(len) { return len === 15; }
                 }
             },
             'Mastercard': {
-                'className': '.mastercard',
+                'className': 'mastercard',
                 'check': {
                     'match':  function(num) { return num[0] === '5'; },
                     'length': function(len) { return len === 16; }
                 }
             },
             'Discover': {
-                'className': '.discover',
+                'className': 'discover',
                 'check': {
                     'match':  function(num) { return num[0] === '6'; },
                     'length': function(len) { return len === 16; }

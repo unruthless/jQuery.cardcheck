@@ -5,9 +5,29 @@
   <meta charset="utf-8">
   <title>Detect Credit Card Type</title>
   <style type="text/css">
-    #cards .card {
-      display: none;
+    #card_type {
+      background: url('icons/credit_card_sprites.png') no-repeat 30px 0;
+      display: inline-block;
+      height: 20px;
+      width: 27px;
     }
+    #card_type.visa       { background-position: 0 0 !important; }
+    #card_type.mastercard { background-position: -30px 0 !important; }
+    #card_type.amex       { background-position: -60px 0 !important; }
+    #card_type.discover   { background-position: -90px 0 !important; }
+/*
+    #card_status {
+      background: url('icons/status_sprites.png') no-repeat 30px 0;
+      height: 20px;
+    }
+    #card_status span {
+      background-color: #CCC;
+      display: block;
+      margin-left: 25px;
+    }
+    #card_status.invalid  { background-position: 0 0 !important; color: #F00; }
+    #card_status.valid    { background-position: -30px 0 !important; color: #0F0; }
+    */
   </style>
 
 </head>
@@ -15,15 +35,12 @@
 <body>
 
   <form>
-    <label for="card_number">Enter Card Number:</label>
-    <input type="text" name="card_number" id="card_number" value="">
-    <span id="cards">
-      <img src="icons/visa.png" class="card visa" alt="Visa">
-      <img src="icons/mastercard.png" class="card mastercard" alt="MasterCard">
-      <img src="icons/amex.png" class="card amex" alt="American Express">
-      <img src="icons/discover.png" class="card discover" alt="Discover">
-    </span>
-    <span id="status"></span>
+    <div class="field">
+      <label for="card_number">Enter Card Number:</label>
+      <input id="card_number" type="text" name="card_number" value="">
+      <span id="card_type"></span>
+      <p id="card_status"><span></span></p>
+    </div>
   </form>
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
@@ -31,25 +48,20 @@
   <script>
   jQuery(function($) {
       
-      var statuses = {
-          'empty':   '',
-          'unknown': 'Sorry, that isn\'t a recognized card type.',
-          'invalidLen': 'Invalid length :(',
-          'invalidLuhn': 'Invalid Luhn :(',
-          'valid':   'Valid :)'
-      };
-      
+      // Run jQuery.cardcheck
       $('#card_number').cardcheck({
           callback: function(num, len, type, className, validLen, validLuhn, opts) {
               
               // Show credit card type
-              $('#cards').find('.card').hide().filter(className).show();
+              $('#card_type').removeClass().addClass(className);
               
-              // Get status
-              var status = len < 1 ? 'empty' : !type ? 'unknown' : !validLen ? 'invalidLen' : !validLuhn ? 'invalidLuhn' : 'valid';
-              
-              // Show status
-              $('#status').html(statuses[status]);
+              // Get and populate status
+              var status = (validLen && validLuhn) ? 'valid' : 'invalid',
+                  message = (len < 1) ? 'Please provide a credit card number.' : !type ? 'We accept Visa, MasterCard, American Express, and Discover.' : (!validLen || !validLuhn) ? 'Please check that this number matches your credit card.' : '';
+
+              $('#card_status')
+                  .removeClass().addClass(status)
+                  .children().text(message);
               
           }
       });
