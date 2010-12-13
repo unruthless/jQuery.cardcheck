@@ -50,8 +50,9 @@
         
         // Allow for just a callback to be provided or extend opts
         if (opts && $.isFunction(opts)) {
-            defaults.callback = opts;
-            opts = defaults;
+            var _opts = $({}, defaults);
+            _opts.callback = opts;
+            opts = _opts;
         }
         else {
             opts = $.extend({}, defaults, opts);
