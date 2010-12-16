@@ -14,7 +14,7 @@
     
     // Plugin Core
     $.cardcheck = function(opts) {
-        var cards = defaults.types || {},
+        var cards = defaults.types || [],
             num = (typeof opts === "string") ? opts : opts.num,
             len = num.length,
             type,
@@ -22,6 +22,7 @@
             validLuhn = false;
         
         // Get matched type based on credit card number
+        
         $.each(cards, function(index, card) {
             if (card.checkType(num)) {
                 type = index;
@@ -107,25 +108,25 @@
             {
                 name: 'Visa',
                 className: 'visa',
-                checkType: function(num) { return num[0] === '4'; },
+                checkType: function(num) { return num.charAt(0) === '4'; },
                 checkLength: function(len) { return len === 13 || len === 16; }
              },
             {
                 name: 'American Express',
                 className: 'amex',
-                checkType: function(num) { return num[0] === '3'; },
+                checkType: function(num) { return num.charAt(0) === '3'; },
                 checkLength: function(len) { return len === 15; }
             },
             {
                 name: 'MasterCard',
                 className: 'mastercard',
-                checkType: function(num) { return num[0] === '5'; },
+                checkType: function(num) { return num.charAt(0) === '5'; },
                 checkLength: function(len) { return len === 16; }
             },
             {
                 name: 'Discover',
                 className: 'discover',
-                checkType:  function(num) { return num[0] === '6'; },
+                checkType:  function(num) { return num.charAt(0) === '6'; },
                 checkLength: function(len) { return len === 16; }
             }
         ],
