@@ -63,7 +63,7 @@
         return this.bind('keyup', function() {
             
             var cards = opts.types || {},
-                num = this.value,
+                num = this.value.replace(/\D+/g, ''), // strip all non-digits
                 name = '',
                 className = '',
                 
