@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>jQuery.fn.cardcheck - Detect Credit Card Type</title>
+  <link rel="stylesheet" href="base.css">
+  <style type="text/css">
+    .card .card_icon,
+    .card .status_icon {
+      /* For a more robust cross-browser implementation, see http://bit.ly/aqZnl3 */
+      display: inline-block;
+      vertical-align: bottom;
+      height: 23px;
+      width: 27px;
+    }
+
+    /* --- Card Icon --- */
+    .card .card_icon {
+      background: transparent url('img/credit_card_sprites.png') no-repeat 30px 0;
+    }
+    
+    /* Need to support IE6? These four rules won't work, so rewrite 'em. */
+    .card .card_icon.visa       { background-position:   0   0 !important; }
+    .card .card_icon.mastercard { background-position: -30px 0 !important; }
+    .card .card_icon.amex       { background-position: -60px 0 !important; }
+    .card .card_icon.discover   { background-position: -90px 0 !important; }
+
+    /* --- Card Status --- */
+    .card .status_icon {
+      background: transparent url('img/status_sprites.png') no-repeat 33px 0;
+    }
+    .card .invalid              { color: #AD3333; background: #f8e7e7; }
+    .card .valid                { color: #33AD33; background: #e7f8e7; }
+    .card .invalid .status_icon { background-position: 3px 0 !important; }
+    .card .valid .status_icon   { background-position: -27px 0 !important; }
+
+  </style>
+
+</head>
+
+<body>
+
+  <form>
+    <div class="field card">
+      <label for="card_number">Enter Card Number:</label>
+      <p>
+        <input name="card_number" type="text" value="">
+        <span class="card_icon"></span>
+      </p>
+      <p class="status">
+        <span class="status_icon"></span>
+        <span class="status_message"></span>
+      </p>
+    </div>
+  </form>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+  <script src="../src/jquery.cardcheck.js"></script>
+  <script>
+    jQuery(function($) {
+        
+        // If JavaScript is enabled, hide fallback select field
+        $('.no-js').removeClass('no-js').addClass('js');
+        
+        // When the user focuses on the credit card input field, hide the status
+        $('.card input').bind('focus', function() {
+            $('.card .status').hide();
+        });
+        
+        // When the user tabs or clicks away from the credit card input field, show the status
+        $('.card input').bind('blur', function() {
+            $('.card .status').show();
+        });
+        
+        // Run jQuery.cardcheck on the input
+        $('.card input').cardcheck({
+            callback: function(result) {
+                
+                var status = (result.validLen && result.validLuhn) ? 'valid' : 'invalid',
+                    message = '',
+                    types = '';
+                
+                // Get the names of all accepted card types to use in the status message.
+                for (i in result.opts.types) {
+                    types += result.opts.types[i].name + ", ";
+                }
+                types = types.substring(0, types.length-2);
+                
+                // Set status message
+                if (result.len < 1) {
+                    message = 'Please provide a credit card number.';
+                } else if (!result.cardClass) {
+                    message = 'We accept the following types of cards: ' + types + '.';
+                } else if (!result.validLen) {
+                    message = 'Please check that this number matches your ' + result.cardName + ' (it appears to be the wrong number of digits.)';
+                } else if (!result.validLuhn) {
+                    message = 'Please check that this number matches your ' + result.cardName + ' (did you mistype a digit?)';
+                } else {
+                    message = 'Great, looks like a valid ' + result.cardName + '.';
+                }
+                
+                // Show credit card icon
+                $('.card .card_icon').removeClass().addClass('card_icon ' + result.cardClass);
+                
+                // Show status message
+                $('.card .status').removeClass('invalid valid').addClass(status).children('.status_message').text(message);
+            }
+        });
+    });
+  </script>
+
+</body>
+
+</html>
