@@ -24,10 +24,9 @@
 
     // ---------------
     module("jQuery.fn.cardcheck");
-
+    
     test("Initialization", function(){
       expect(1);
-    
       ok(jQuery.fn.cardcheck, "jQuery.fn.cardcheck is available on jQuery prototype");
     });
     
@@ -74,7 +73,7 @@
       ok(type.checkLength(len), "valid length for an AmEx");
       ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
     });
-
+    
     test("valid Discover: 6011111111111117", function(){
       expect(6);
       var num = "6011111111111117",
@@ -88,7 +87,7 @@
       ok(type.checkLength(len), "valid length for a Discover");
       ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
     });
-
+    
     test("valid Discover: 6011000990139424", function(){
       expect(6);
       var num = "6011000990139424",
@@ -102,8 +101,7 @@
       ok(type.checkLength(len), "valid length for a Discover");
       ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
     });
-
-
+    
     test("valid MasterCard: 5555555555554444", function(){
       expect(6);
       var num = "5555555555554444",
@@ -117,7 +115,7 @@
       ok(type.checkLength(len), "valid length for a MasterCard");
       ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
     });
-
+    
     test("valid MasterCard: 5105105105105100", function(){
       expect(6);
       var num = "5105105105105100",
@@ -131,8 +129,7 @@
       ok(type.checkLength(len), "valid length for a MasterCard");
       ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
     });
-
-
+    
     test("valid Visa: 4111111111111111", function(){
       expect(6);
       var num = "4111111111111111",
@@ -146,7 +143,7 @@
       ok(type.checkLength(len), "valid length for a Visa");
       ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
     });
-
+    
     test("valid Visa: 4012888888881881", function(){
       expect(6);
       var num = "4012888888881881",
@@ -160,8 +157,7 @@
       ok(type.checkLength(len), "valid length for a Visa");
       ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
     });
-
-
+    
     test("valid Visa: 4222222222222", function(){
       expect(6);
       var num = "4222222222222",
@@ -175,22 +171,25 @@
       ok(type.checkLength(len), "valid length for a Visa");
       ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
     });
-
-
+    
+    
     // ---------------
     module("jQuery.cardcheck");
-
+    
     test("initialization", function(){
+      expect(1);
       ok(jQuery.cardcheck, "jQuery.cardcheck is available on jQuery prototype");
     });
-
+    
+    
     // ---------------
     module("jQuery.fn.cardcheck.opts");
-
+    
     test("initialization", function(){
+      expect(1);
       ok(jQuery.fn.cardcheck.opts, "jQuery.fn.cardcheck.opts is available on jQuery prototype");
     });
-
+    
   </script>
 
 
