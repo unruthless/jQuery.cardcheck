@@ -1,4 +1,4 @@
-# jQuery.cardcheck [https://github.com/unruthless/jQuery.cardcheck](github.com/unruthless/jQuery.cardcheck)
+# jQuery.cardcheck [github.com/unruthless/jQuery.cardcheck](https://github.com/unruthless/jQuery.cardcheck)
 
 A plugin for detecting and validating credit cards.
 
