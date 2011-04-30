@@ -47,7 +47,6 @@
 
     // Plugin Helper
     $.fn.cardcheck = function(opts) {
-        
         // Allow for just a callback to be provided or extend opts
         if (opts && $.isFunction(opts)) {
             var _opts = $({}, defaults);
@@ -60,7 +59,6 @@
         
         // Fire on keyup
         return this.bind('keyup', function() {
-            
             var cards = opts.types || {},
                 num = this.value.replace(/\D+/g, ''), // strip all non-digits
                 name = '',
@@ -108,6 +106,7 @@
             }
             return total % 10 === 0;
         },
+        // http://en.wikipedia.org/wiki/List_of_Bank_Identification_Numbers
         types: [
             {
                 name: 'Visa',
@@ -172,7 +171,7 @@
                     return num.substr(0, 2) === '36' || num.substr(0, 2) === '38';
                 },
                 checkLength: function(len) {
-                    return len === 16;
+                    return len === 14;
                 }
             }
         ],
