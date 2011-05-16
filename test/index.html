@@ -1,199 +1,248 @@
 <!DOCTYPE html>
-
-<html>
-
 <head>
-  <meta charset="utf-8">
-  <title>jQuery.cardcheck Unit Tests</title>
-  <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
+    <meta charset="utf-8">
+    <title>jQuery.cardcheck Unit Tests</title>
+    <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
 </head>
-
 <body>
-  <h1 id="qunit-header">jQuery.fn.cardcheck</h1>
-  <h2 id="qunit-banner"></h2>
-  <div id="qunit-testrunner-toolbar"></div>
-  <h2 id="qunit-userAgent"></h2>
-  <ol id="qunit-tests"></ol>
-  <div id="qunit-fixture">test markup, will be hidden</div>
+    
+<h1 id="qunit-header">jQuery.fn.cardcheck</h1>
+<h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="qunit-fixture">test markup, will be hidden</div>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script src="qunit/qunit.js"></script>
+<script src="../src/jquery.cardcheck.js"></script>
+<script>
+// ---------------
+module("jQuery.fn.cardcheck");
 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-  <script src="qunit/qunit.js"></script>
-  <script src="../src/jquery.cardcheck.js"></script>
-  <script>
+test("Initialization", function(){
+    expect(1);
+    ok(jQuery.fn.cardcheck, "jQuery.fn.cardcheck is available on jQuery prototype");
+});
 
-    // ---------------
-    module("jQuery.fn.cardcheck");
-    
-    test("Initialization", function(){
-      expect(1);
-      ok(jQuery.fn.cardcheck, "jQuery.fn.cardcheck is available on jQuery prototype");
-    });
-    
-    // https://www.paypalobjects.com/en_US/vhelp/paypalmanager_help/credit_card_numbers.htm
-    
-    test("valid American Express: 378282246310005", function(){
-      expect(6);
-      var num = "378282246310005",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "American Express", "has name 'American Express'");
-      equals(type.className, "amex", "has className 'amex'");
-      ok(type.checkType(num), "looks like an AmEx");
-      ok(type.checkLength(len), "valid length for an AmEx");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    test("valid American Express: 371449635398431", function(){
-      expect(6);
-      var num = "378282246310005",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "American Express", "has name 'American Express'");
-      equals(type.className, "amex", "has className 'amex'");
-      ok(type.checkType(num), "looks like an AmEx");
-      ok(type.checkLength(len), "valid length for an AmEx");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    test("valid American Express Corporate: 378734493671000", function(){
-      expect(6);
-      var num = "378282246310005",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "American Express", "has name 'American Express'");
-      equals(type.className, "amex", "has className 'amex'");
-      ok(type.checkType(num), "looks like an AmEx");
-      ok(type.checkLength(len), "valid length for an AmEx");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    test("valid Discover: 6011111111111117", function(){
-      expect(6);
-      var num = "6011111111111117",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "Discover", "has name 'Discover'");
-      equals(type.className, "discover", "has className 'discover'");
-      ok(type.checkType(num), "looks like a Discover");
-      ok(type.checkLength(len), "valid length for a Discover");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    test("valid Discover: 6011000990139424", function(){
-      expect(6);
-      var num = "6011000990139424",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "Discover", "has name 'Discover'");
-      equals(type.className, "discover", "has className 'discover'");
-      ok(type.checkType(num), "looks like a Discover");
-      ok(type.checkLength(len), "valid length for a Discover");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    test("valid MasterCard: 5555555555554444", function(){
-      expect(6);
-      var num = "5555555555554444",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "MasterCard", "has name 'MasterCard'");
-      equals(type.className, "mastercard", "has className 'mastercard'");
-      ok(type.checkType(num), "looks like a MasterCard");
-      ok(type.checkLength(len), "valid length for a MasterCard");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    test("valid MasterCard: 5105105105105100", function(){
-      expect(6);
-      var num = "5105105105105100",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "MasterCard", "has name 'MasterCard'");
-      equals(type.className, "mastercard", "has className 'mastercard'");
-      ok(type.checkType(num), "looks like a MasterCard");
-      ok(type.checkLength(len), "valid length for a MasterCard");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    test("valid Visa: 4111111111111111", function(){
-      expect(6);
-      var num = "4111111111111111",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "Visa", "has name 'Visa'");
-      equals(type.className, "visa", "has className 'visa'");
-      ok(type.checkType(num), "looks like a Visa");
-      ok(type.checkLength(len), "valid length for a Visa");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    test("valid Visa: 4012888888881881", function(){
-      expect(6);
-      var num = "4012888888881881",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "Visa", "has name 'Visa'");
-      equals(type.className, "visa", "has className 'visa'");
-      ok(type.checkType(num), "looks like a Visa");
-      ok(type.checkLength(len), "valid length for a Visa");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    test("valid Visa: 4222222222222", function(){
-      expect(6);
-      var num = "4222222222222",
-          len = num.length,
-          obj = $.cardcheck(num),
-          type = $.fn.cardcheck.opts.types[obj.type];
-      ok($.isPlainObject(obj), "return value is an object");
-      equals(type.name, "Visa", "has name 'Visa'");
-      equals(type.className, "visa", "has className 'visa'");
-      ok(type.checkType(num), "looks like a Visa");
-      ok(type.checkLength(len), "valid length for a Visa");
-      ok($.fn.cardcheck.opts.checkLuhn(num), "this card passes Luhn");
-    });
-    
-    
-    // ---------------
-    module("jQuery.cardcheck");
-    
-    test("initialization", function(){
-      expect(1);
-      ok(jQuery.cardcheck, "jQuery.cardcheck is available on jQuery prototype");
-    });
-    
-    
-    // ---------------
-    module("jQuery.fn.cardcheck.opts");
-    
-    test("initialization", function(){
-      expect(1);
-      ok(jQuery.fn.cardcheck.opts, "jQuery.fn.cardcheck.opts is available on jQuery prototype");
-    });
-    
-  </script>
+// https://www.paypalobjects.com/en_US/vhelp/paypalmanager_help/credit_card_numbers.htm
 
+//
+// American Express
+//
+test("Valid American Express: 378282246310005", function(){
+    expect(6);
+    var num  = "378282246310005",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "American Express", "Has name 'American Express'");
+    equals(type.className, "amex", "Has className 'amex'");
+    ok(type.checkType(num), "Looks like an AmEx");
+    ok(type.checkLength(len), "Valid length for an AmEx");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
 
+test("Valid American Express: 371449635398431", function(){
+    expect(6);
+    var num  = "378282246310005",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type]; 
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "American Express", "Has name 'American Express'");
+    equals(type.className, "amex", "Has className 'amex'");
+    ok(type.checkType(num), "Looks like an AmEx");
+    ok(type.checkLength(len), "Valid length for an AmEx");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+test("Valid American Express Corporate: 378734493671000", function(){
+    expect(6);
+    var num  = "378282246310005",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "American Express", "Has name 'American Express'");
+    equals(type.className, "amex", "Has className 'amex'");
+    ok(type.checkType(num), "Looks like an AmEx");
+    ok(type.checkLength(len), "Valid length for an AmEx");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+//
+// Diners Club
+//
+test("Valid Diners Club: 38520000023237", function(){
+    expect(6);
+    var num  = "38520000023237",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "Diners Club", "Has name 'Diners Club'");
+    equals(type.className, "diners", "Has className 'diners'");
+    ok(type.checkType(num), "Looks like a Diners Club");
+    ok(type.checkLength(len), "Valid length for a Diners Club");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+//
+// Discover
+//
+test("Valid Discover: 6011111111111117", function(){
+    expect(6);
+    var num  = "6011111111111117",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "Discover", "Has name 'Discover'");
+    equals(type.className, "discover", "Has className 'discover'");
+    ok(type.checkType(num), "Looks like a Discover");
+    ok(type.checkLength(len), "Valid length for a Discover");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+test("Valid Discover: 6011000990139424", function(){
+    expect(6);
+    var num  = "6011000990139424",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "Discover", "Has name 'Discover'");
+    equals(type.className, "discover", "Has className 'discover'");
+    ok(type.checkType(num), "Looks like a Discover");
+    ok(type.checkLength(len), "Valid length for a Discover");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+//
+// JCB
+//
+test("Valid JCB: 3530111333300000", function(){
+    expect(6);
+    var num  = "3530111333300000",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "JCB", "Has name 'JCB'");
+    equals(type.className, "jcb", "Has className 'jcb'");
+    ok(type.checkType(num), "Looks like a JCB");
+    ok(type.checkLength(len), "Valid length for a JCB");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+test("Valid JCB: 3566002020360505", function(){
+    expect(6);
+    var num  = "3566002020360505",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "JCB", "Has name 'JCB'");
+    equals(type.className, "jcb", "Has className 'jcb'");
+    ok(type.checkType(num), "Looks like a JCB");
+    ok(type.checkLength(len), "Valid length for a JCB");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+//
+// MasterCard
+//
+test("Valid MasterCard: 5555555555554444", function(){
+    expect(6);
+    var num  = "5555555555554444",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "MasterCard", "Has name 'MasterCard'");
+    equals(type.className, "mastercard", "Has className 'mastercard'");
+    ok(type.checkType(num), "Looks like a MasterCard");
+    ok(type.checkLength(len), "Valid length for a MasterCard");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+test("Valid MasterCard: 5105105105105100", function(){
+    expect(6);
+    var num  = "5105105105105100",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "MasterCard", "Has name 'MasterCard'");
+    equals(type.className, "mastercard", "Has className 'mastercard'");
+    ok(type.checkType(num), "Looks like a MasterCard");
+    ok(type.checkLength(len), "Valid length for a MasterCard");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+//
+// Visa
+//
+test("Valid Visa: 4111111111111111", function(){
+    expect(6);
+    var num  = "4111111111111111",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "Visa", "Has name 'Visa'");
+    equals(type.className, "visa", "Has className 'visa'");
+    ok(type.checkType(num), "Looks like a Visa");
+    ok(type.checkLength(len), "Valid length for a Visa");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+test("Valid Visa: 4012888888881881", function(){
+    expect(6);
+    var num  = "4012888888881881",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "Visa", "Has name 'Visa'");
+    equals(type.className, "visa", "Has className 'visa'");
+    ok(type.checkType(num), "Looks like a Visa");
+    ok(type.checkLength(len), "Valid length for a Visa");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+test("Valid Visa: 4222222222222", function(){
+    expect(6);
+    var num  = "4222222222222",
+        len  = num.length,
+        obj  = $.cardcheck(num),
+        type = $.fn.cardcheck.opts.types[obj.type];
+    ok($.isPlainObject(obj), "Return value is an object");
+    equals(type.name, "Visa", "Has name 'Visa'");
+    equals(type.className, "visa", "Has className 'visa'");
+    ok(type.checkType(num), "Looks like a Visa");
+    ok(type.checkLength(len), "Valid length for a Visa");
+    ok($.fn.cardcheck.opts.checkLuhn(num), "This card passes Luhn");
+});
+
+// ---------------
+module("jQuery.cardcheck");
+
+test("initialization", function(){
+    expect(1);
+    ok(jQuery.cardcheck, "jQuery.cardcheck is available on jQuery prototype");
+});
+
+// ---------------
+module("jQuery.fn.cardcheck.opts");
+
+test("initialization", function(){
+    expect(1);
+    ok(jQuery.fn.cardcheck.opts, "jQuery.fn.cardcheck.opts is available on jQuery prototype");
+});
+</script>
 
 </body>
-
 </html>
