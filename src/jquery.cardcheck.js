@@ -119,6 +119,28 @@
                 }
             },
             {
+                name: 'Visa Electron',
+                className: 'visa',
+                checkType: function(num) {
+                    strinregex =  /^(4026|417500|4508|4844|491(3|7))/
+                    return stringregex.test(num)
+                },
+                checkLength: function(len) {
+                    return len === 16;
+                }
+            },
+            {
+                name: 'Rupay',
+                className: 'rupay',
+                checkType: function(num) {
+                    stringregex = /^60[0-9]/
+                    return stringregex.test(num)
+                },
+                checkLength: function(len) {
+                    return len === 16;
+                }
+            },
+            {
                 name: 'American Express',
                 className: 'amex',
                 checkType: function(num) {
@@ -142,6 +164,17 @@
                 }
             },
             {
+                name: 'maestro',
+                className: 'maestro',
+                checkType: function(num) {
+                    stringregex =  /^(5018|5020|5038|6304|6759|676[1-3])/
+                    return stringregex.test(num)
+                },
+                checkLength: function(len) {
+                    return len === 12 || len === 13 || len === 14 || len === 15 || len === 16 || len === 17 || len === 18 || len === 19;
+                }
+            },
+            {
                 name: 'Discover',
                 className: 'discover',
                 checkType:  function(num) {
@@ -162,6 +195,39 @@
                 },
                 checkLength: function(len) {
                     return len === 16;
+                }
+            },
+            {
+                name: 'laser',
+                className: 'laser',
+                checkType: function(num) {
+                    strinregex = /^(6304|670[69]|6771)/
+                    return stringregex.test(num)
+                },
+                checkLength: function(len) {
+                    return len === 16 || len === 17 || len === 18 || len === 19;
+                }
+            },
+            {
+                name: 'Diners Club Carte Blanche',
+                className: 'diners',
+                checkType: function(num) {
+                    stringregex =  /^30[0-5]/
+                    return stringregex.test(num)
+                },
+                checkLength: function(len) {
+                    return len === 14;
+                }
+            },
+            {
+                name: 'Diners Club International',
+                className: 'diners',
+                checkType: function(num) {
+                    stringregex = /^36/
+                    return stringregex.test(num)
+                },
+                checkLength: function(len) {
+                    return len === 14;
                 }
             },
             {
